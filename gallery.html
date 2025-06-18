@@ -20,6 +20,24 @@
         #gallery > div {
             @apply overflow-hidden;
         }
+        #gallery img {
+            @apply rounded-lg shadow overflow-hidden;
+        }
+        @media (max-width: 640px) {
+            #gallery img {
+                height: 10rem;
+            }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            #gallery img {
+                height: 12rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            #gallery img {
+                height: 16rem;
+            }
+        }
     </style>
  </head>
 
