@@ -138,6 +138,12 @@
         });
       });
       observer.observe(gallery, { childList: true });
+    const audio = document.createElement("audio");
+    audio.src = "Main Menu - Nintendo Wii Music Collection.mp3";
+    audio.autoplay = true;
+    audio.loop = true;
+    audio.style.display = "none";
+    document.body.appendChild(audio);
     </script>
   </body>
 </html>
