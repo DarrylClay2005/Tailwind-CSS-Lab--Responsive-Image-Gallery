@@ -38,6 +38,7 @@
                 height: 16rem;
             }
         }
+        
     </style>
  </head>
 
@@ -106,7 +107,33 @@
 gallery.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
 
  fetchImages();
+gallery.addEventListener("mouseover", function (e) {
+    if (e.target.tagName === "IMG") {
+        e.target.classList.add("transform", "hover:scale-105", "transition", "duration-300", "ease-in-out");
+    }
+});
+gallery.addEventListener("mouseout", function (e) {
+    if (e.target.tagName === "IMG") {
+        e.target.classList.remove("transform", "hover:scale-105", "transition", "duration-300", "ease-in-out");
+    }
+});
+gallery.addEventListener("DOMContentLoaded", () => {
+    const imgs = gallery.querySelectorAll("img");
+    imgs.forEach(img => {
+        img.classList.add("w-full", "h-60", "object-cover", "rounded-lg", "shadow", "overflow-hidden");
+        img.parentElement.classList.add("overflow-hidden");
+    });
+});
 
+// Also apply classes after images are loaded dynamically
+const observer = new MutationObserver(() => {
+    const imgs = gallery.querySelectorAll("img");
+    imgs.forEach(img => {
+        img.classList.add("w-full", "h-60", "object-cover", "rounded-lg", "shadow", "overflow-hidden");
+        img.parentElement.classList.add("overflow-hidden");
+    });
+});
+observer.observe(gallery, { childList: true });
  </script>
 
  </body>
