@@ -1,88 +1,70 @@
 <!DOCTYPE html>
 
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
- <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
- <meta charset="UTF-8" />
-
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
- <title>Image Gallery</title>
+    <title>Image Gallery</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        #gallery {
-            @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4;
-        }
+      #gallery {
+        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4;
+      }
+      #gallery img {
+        @apply w-full h-48 object-cover rounded shadow;
+      }
+      #gallery > div {
+        @apply overflow-hidden;
+      }
+      #gallery img {
+        @apply rounded-lg shadow overflow-hidden;
+      }
+      @media (max-width: 640px) {
         #gallery img {
-            @apply w-full h-48 object-cover rounded shadow;
+          height: 10rem;
         }
-        #gallery > div {
-            @apply overflow-hidden;
-        }
+      }
+      @media (min-width: 641px) and (max-width: 1023px) {
         #gallery img {
-            @apply rounded-lg shadow overflow-hidden;
+          height: 12rem;
         }
-        @media (max-width: 640px) {
-            #gallery img {
-                height: 10rem;
-            }
+      }
+      @media (min-width: 1024px) {
+        #gallery img {
+          height: 16rem;
         }
-        @media (min-width: 641px) and (max-width: 1023px) {
-            #gallery img {
-                height: 12rem;
-            }
-        }
-        @media (min-width: 1024px) {
-            #gallery img {
-                height: 16rem;
-            }
-        }
-        
+      }
     </style>
- </head>
+  </head>
 
- <body>
+  <body>
+    <header></header>
 
- <header></header>
+    <main>
+      <div id="gallery"></div>
+    </main>
 
- <main>
+    <footer></footer>
 
- <div id="gallery"></div>
+    <script>
+      const gallery = document.getElementById("gallery");
 
- </main>
+      // Fetch 12 random images from Lorem Picsum
 
- <footer></footer>
+      async function fetchImages() {
+        try {
+          const res = await fetch(
+            "https://picsum.photos/v2/list?page=2&limit=50"
+          );
 
+          const data = await res.json();
 
+          gallery.innerHTML = data
 
- <script>
-
- const gallery = document.getElementById("gallery");
-
-
-
- // Fetch 12 random images from Lorem Picsum
-
- async function fetchImages() {
-
- try {
-
- const res = await fetch(
-
- "https://picsum.photos/v2/list?page=2&limit=50"
-
- );
-
- const data = await res.json();
-
-
-
- gallery.innerHTML = data
-
- .map((image) => {
-
- return `
+            .map((image) => {
+              return `
 
  <div>
 
@@ -91,51 +73,71 @@
  </div>
 
  `;
+            })
 
- })
+            .join("");
+        } catch (error) {
+          console.error("Failed to fetch images:", error);
+        }
+      }
 
- .join("");
+      gallery.className =
+        "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
 
- } catch (error) {
+      fetchImages();
+      gallery.addEventListener("mouseover", function (e) {
+        if (e.target.tagName === "IMG") {
+          e.target.classList.add(
+            "transform",
+            "hover:scale-105",
+            "transition",
+            "duration-300",
+            "ease-in-out"
+          );
+        }
+      });
+      gallery.addEventListener("mouseout", function (e) {
+        if (e.target.tagName === "IMG") {
+          e.target.classList.remove(
+            "transform",
+            "hover:scale-105",
+            "transition",
+            "duration-300",
+            "ease-in-out"
+          );
+        }
+      });
+      gallery.addEventListener("DOMContentLoaded", () => {
+        const imgs = gallery.querySelectorAll("img");
+        imgs.forEach((img) => {
+          img.classList.add(
+            "w-full",
+            "h-60",
+            "object-cover",
+            "rounded-lg",
+            "shadow",
+            "overflow-hidden"
+          );
+          img.parentElement.classList.add("overflow-hidden");
+        });
+      });
 
- console.error("Failed to fetch images:", error);
-
- }
-
- }
-
-gallery.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
-
- fetchImages();
-gallery.addEventListener("mouseover", function (e) {
-    if (e.target.tagName === "IMG") {
-        e.target.classList.add("transform", "hover:scale-105", "transition", "duration-300", "ease-in-out");
-    }
-});
-gallery.addEventListener("mouseout", function (e) {
-    if (e.target.tagName === "IMG") {
-        e.target.classList.remove("transform", "hover:scale-105", "transition", "duration-300", "ease-in-out");
-    }
-});
-gallery.addEventListener("DOMContentLoaded", () => {
-    const imgs = gallery.querySelectorAll("img");
-    imgs.forEach(img => {
-        img.classList.add("w-full", "h-60", "object-cover", "rounded-lg", "shadow", "overflow-hidden");
-        img.parentElement.classList.add("overflow-hidden");
-    });
-});
-
-// Also apply classes after images are loaded dynamically
-const observer = new MutationObserver(() => {
-    const imgs = gallery.querySelectorAll("img");
-    imgs.forEach(img => {
-        img.classList.add("w-full", "h-60", "object-cover", "rounded-lg", "shadow", "overflow-hidden");
-        img.parentElement.classList.add("overflow-hidden");
-    });
-});
-observer.observe(gallery, { childList: true });
- </script>
-
- </body>
-
+      // Also apply classes after images are loaded dynamically
+      const observer = new MutationObserver(() => {
+        const imgs = gallery.querySelectorAll("img");
+        imgs.forEach((img) => {
+          img.classList.add(
+            "w-full",
+            "h-60",
+            "object-cover",
+            "rounded-lg",
+            "shadow",
+            "overflow-hidden"
+          );
+          img.parentElement.classList.add("overflow-hidden");
+        });
+      });
+      observer.observe(gallery, { childList: true });
+    </script>
+  </body>
 </html>
